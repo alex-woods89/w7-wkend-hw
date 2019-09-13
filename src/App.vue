@@ -1,17 +1,33 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h1>Edinburgh subreddit app</h1>
+    <subreddit-list :subreddits='subreddits'></subreddit-list>
+    <subreddit-info :selectedSubreddit='selectedSubreddit'></subreddit-info>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import {eventBus} from "./main"
+import SubredditList from './components/SubredditList'
+import SubredditInfo from './components/SubredditInfo'
+
 
 export default {
   name: 'app',
+   data() {
+     return{
+       subreddits: [],
+       selectedSubreddit: null
+     }
+   },
   components: {
-    HelloWorld
+    "subreddit-list": SubredditList,
+    "subreddit-info": SubredditInfo
+  },
+  mounted() {
+    fetch('https://www.reddit.com/r/Edinburgh/.json')
+    .then(result => result.json())
+    .then(subreddits => this.subreddits = subreddits)
   }
 }
 </script>
